@@ -1,0 +1,17 @@
+{
+    "agents": [
+        "cursor",
+        "claude_code",
+        "codex"
+    ],
+    "guidelines": true,
+    "herd_mcp": true,
+    "mcp": true,
+    "nightwatch_mcp": false,
+    "sail": false,
+    "skills": [
+        "fluxui-development",
+        "livewire-development",
+        "pest-testing"
+    ]
+}
