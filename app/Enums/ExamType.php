@@ -11,9 +11,9 @@ enum ExamType: string
     public function getLabel(): string
     {
         return match ($this) {
-            self::Written => 'Written Exam',
-            self::Oral => 'Oral Exam',
-            self::Portfolio => 'Portfolio Assessment',
+            self::Written => __('Written Exam'),
+            self::Oral => __('Oral Exam'),
+            self::Portfolio => __('Portfolio Assessment'),
         };
     }
 
@@ -29,9 +29,9 @@ enum ExamType: string
     public function getShortLabel(): string
     {
         return match ($this) {
-            self::Written => 'Written',
-            self::Oral => 'Oral',
-            self::Portfolio => 'Portfolio',
+            self::Written => __('Written'),
+            self::Oral => __('Oral'),
+            self::Portfolio => __('Portfolio'),
         };
     }
 
@@ -42,13 +42,12 @@ enum ExamType: string
         $firstType = explode('#', $germanType)[0];
         $trimmedType = trim($firstType);
 
-        // Translate German exam type to English label
         $translatedType = __($trimmedType);
 
         return match ($translatedType) {
-            'Written Exam' => self::Written,
-            'Oral Exam' => self::Oral,
-            'Portfolio Assessment' => self::Portfolio,
+            'Written Exam', 'Schriftliche Prüfung' => self::Written,
+            'Oral Exam', 'Mündliche Prüfung', 'Kolloquium' => self::Oral,
+            'Portfolio Assessment', 'Portfolio', 'Praktische Studienleistung' => self::Portfolio,
             default => self::Written, // Default fallback
         };
     }

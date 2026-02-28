@@ -12,10 +12,10 @@ enum ElectiveStatus: string
     public function getLabel(): string
     {
         return match ($this) {
-            self::Draft => 'Draft',
-            self::Published => 'Published',
-            self::Closed => 'Closed',
-            self::Archived => 'Archived',
+            self::Draft => __('Draft'),
+            self::Published => __('Published'),
+            self::Closed => __('Closed'),
+            self::Archived => __('Archived'),
         };
     }
 

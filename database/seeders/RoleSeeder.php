@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -16,11 +15,6 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Artisan::call('shield:generate', [
-            '--all' => true,
-            '--panel' => 'admin',
-            '--option' => 'permissions',
-        ]);
         resolve(PermissionRegistrar::class)->forgetCachedPermissions();
 
         $superAdminRole = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);

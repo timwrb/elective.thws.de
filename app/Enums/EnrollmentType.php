@@ -10,8 +10,8 @@ enum EnrollmentType: string
     public function label(): string
     {
         return match ($this) {
-            self::Priority => 'Priority-based',
-            self::Direct => 'Direct Enrollment',
+            self::Priority => __('Priority-based'),
+            self::Direct => __('Direct Enrollment'),
         };
     }
 }

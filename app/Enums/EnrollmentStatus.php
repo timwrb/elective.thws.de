@@ -12,10 +12,10 @@ enum EnrollmentStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Pending => 'Pending',
-            self::Confirmed => 'Confirmed',
-            self::Rejected => 'Rejected',
-            self::Withdrawn => 'Withdrawn',
+            self::Pending => __('Pending'),
+            self::Confirmed => __('Confirmed'),
+            self::Rejected => __('Rejected'),
+            self::Withdrawn => __('Withdrawn'),
         };
     }
 
