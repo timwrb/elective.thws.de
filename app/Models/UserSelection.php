@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class UserSelection extends Model
 {
+    protected $guarded = [];
+
     protected function casts(): array
     {
         return [
