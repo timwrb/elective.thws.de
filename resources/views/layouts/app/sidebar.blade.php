@@ -15,6 +15,14 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+                    @php
+                        $currentSemester = resolve(\App\Services\SemesterService::class)->getCurrentSemester();
+                    @endphp
+                    @if ($currentSemester)
+                        <flux:sidebar.item icon="academic-cap" :href="route('fwpm.index', $currentSemester)" :current="request()->routeIs('fwpm.*')" wire:navigate>
+                            {{ __('FWPM Selection') }}
+                        </flux:sidebar.item>
+                    @endif
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
@@ -81,6 +89,10 @@
         </flux:header>
 
         {{ $slot }}
+
+        @persist('toast')
+            <flux:toast position="top center" />
+        @endpersist
 
         @fluxScripts
     </body>
