@@ -7,9 +7,11 @@ use App\Models\Awpf;
 use App\Models\Semester;
 use App\Models\User;
 use App\Settings\AwpfSettings;
+use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 
 beforeEach(function (): void {
+    Date::setTestNow('2024-01-15 12:00:00');
     $this->semester = Semester::factory()->create();
 });
 
