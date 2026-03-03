@@ -8,9 +8,12 @@ use App\Models\Semester;
 use App\Models\User;
 use App\Models\UserSelection;
 use App\Settings\AwpfSettings;
+use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 
 beforeEach(function (): void {
+    Date::setTestNow('2026-03-15 12:00:00');
+
     // March 2026 → SemesterService resolves to year=2025, season=Winter
     $this->semester = Semester::factory()->winter()->year(2025)->create();
     $this->user = User::factory()->create();
