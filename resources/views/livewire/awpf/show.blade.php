@@ -59,7 +59,7 @@
             @endif
 
             @if (filled($awpf->course_url))
-                <flux:button :href="$awpf->course_url" target="_blank" icon="arrow-top-right-on-square" variant="ghost" class="mt-2">
+                <flux:button :href="$awpf->course_url" target="_blank" rel="noopener noreferrer"  icon="arrow-top-right-on-square" variant="ghost" class="mt-2">
                     {{ __('Course Website') }}
                 </flux:button>
             @endif
