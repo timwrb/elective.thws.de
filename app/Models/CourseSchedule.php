@@ -14,7 +14,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property string $schedulable_type
- * @property int $schedulable_id
+ * @property string $schedulable_id
  * @property Carbon $scheduled_at
  * @property int $duration_minutes
  * @property string|null $location
@@ -26,8 +26,6 @@ class CourseSchedule extends Model
 {
     /** @use HasFactory<CourseScheduleFactory> */
     use HasFactory;
-
-    protected $guarded = [];
 
     protected function casts(): array
     {
