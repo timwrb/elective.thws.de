@@ -97,7 +97,7 @@ class Fwpm extends Model
     protected function formattedSchedules(): Attribute
     {
         return Attribute::make(get: fn () => $this->schedules()
-            ->orderedByDay()
+            ->orderedByDate()
             ->get()
             ->pluck('formatted_schedule')
             ->join(', '));
