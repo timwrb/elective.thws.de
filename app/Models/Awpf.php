@@ -20,11 +20,17 @@ use Illuminate\Support\Carbon;
  * @property string $id
  * @property string $name
  * @property string|null $content
- * @property int $credits
+ * @property string|null $goals
+ * @property string|null $literature
+ * @property float $credits
+ * @property int|null $max_participants
+ * @property float|null $hours_per_week
+ * @property string|null $type_of_class
  * @property Language $language
  * @property ExamType $exam_type
  * @property ElectiveStatus $status
  * @property string|null $professor_id
+ * @property string|null $lecturer_name
  * @property string|null $course_url
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -42,6 +48,8 @@ class Awpf extends Model
     protected function casts(): array
     {
         return [
+            'credits' => 'decimal:1',
+            'hours_per_week' => 'decimal:1',
             'language' => Language::class,
             'exam_type' => ExamType::class,
             'status' => ElectiveStatus::class,
@@ -63,9 +71,9 @@ class Awpf extends Model
     /** @return Attribute<string, never> */
     protected function formattedSchedules(): Attribute
     {
-        return Attribute::make(get: fn () => $this->schedules()
-            ->orderedByDay()
-            ->get()
+        return Attribute::make(get: fn () => ($this->relationLoaded('schedules')
+            ? $this->schedules->sortBy('scheduled_at')
+            : $this->schedules()->orderedByDate()->get())
             ->pluck('formatted_schedule')
             ->join(', '));
     }

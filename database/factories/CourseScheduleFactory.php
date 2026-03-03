@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\DayOfWeek;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,54 +9,72 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CourseScheduleFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'day_of_week' => fake()->randomElement(DayOfWeek::cases()),
-            'start_time' => fake()->time('H:i:s', '18:00'),
+            'scheduled_at' => fake()->dateTimeBetween('now', '+12 weeks'),
             'duration_minutes' => fake()->randomElement([90, 120, 180, 240, 300]),
+            'location' => null,
         ];
+    }
+
+    public function upcoming(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'scheduled_at' => fake()->dateTimeBetween('+1 week', '+12 weeks'),
+        ]);
+    }
+
+    public function past(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'scheduled_at' => fake()->dateTimeBetween('-12 weeks', '-1 day'),
+        ]);
     }
 
     public function morning(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'start_time' => fake()->time('H:i:s', '12:00'),
-            'duration_minutes' => fake()->randomElement([90, 120, 180]),
-        ]);
+        return $this->state(function (array $attributes) {
+            $date = fake()->dateTimeBetween('now', '+12 weeks');
+            $date->setTime(fake()->numberBetween(8, 11), 0);
+
+            return [
+                'scheduled_at' => $date,
+                'duration_minutes' => fake()->randomElement([90, 120, 180]),
+            ];
+        });
     }
 
     public function afternoon(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'start_time' => fake()->numberBetween(12, 15).':00:00',
-            'duration_minutes' => fake()->randomElement([180, 240]),
-        ]);
-    }
+        return $this->state(function (array $attributes) {
+            $date = fake()->dateTimeBetween('now', '+12 weeks');
+            $date->setTime(fake()->numberBetween(12, 15), 0);
 
-    public function weekday(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'day_of_week' => fake()->randomElement([
-                DayOfWeek::Monday,
-                DayOfWeek::Tuesday,
-                DayOfWeek::Wednesday,
-                DayOfWeek::Thursday,
-                DayOfWeek::Friday,
-            ]),
-        ]);
+            return [
+                'scheduled_at' => $date,
+                'duration_minutes' => fake()->randomElement([180, 240]),
+            ];
+        });
     }
 
     public function fullDay(): static
     {
+        return $this->state(function (array $attributes) {
+            $date = fake()->dateTimeBetween('now', '+12 weeks');
+            $date->setTime(8, 0);
+
+            return [
+                'scheduled_at' => $date,
+                'duration_minutes' => 480,
+            ];
+        });
+    }
+
+    public function withLocation(string $location): static
+    {
         return $this->state(fn (array $attributes) => [
-            'start_time' => '09:00:00',
-            'duration_minutes' => 480,
+            'location' => $location,
         ]);
     }
 }
