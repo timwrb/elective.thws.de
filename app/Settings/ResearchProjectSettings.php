@@ -16,6 +16,8 @@ class ResearchProjectSettings extends Settings
 
     public int $maxStudentsPerProject;
 
+    public int $defaultCredits = 10;
+
     public static function group(): string
     {
         return 'research_projects';
