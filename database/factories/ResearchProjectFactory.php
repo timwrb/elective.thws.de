@@ -33,4 +33,25 @@ class ResearchProjectFactory extends Factory
             'professor_id' => $user?->id ?? User::factory(),
         ]);
     }
+
+    public function published(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'status' => \App\Enums\ElectiveStatus::Published,
+        ]);
+    }
+
+    public function withCreator(?User $user = null): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'creator_id' => $user?->id ?? User::factory(),
+        ]);
+    }
+
+    public function withInviteToken(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'invite_token' => \Illuminate\Support\Str::random(32),
+        ]);
+    }
 }
