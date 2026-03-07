@@ -43,16 +43,6 @@ class User extends Authenticatable implements HasMedia
     use TwoFactorAuthenticatable;
 
     /** @var list<string> */
-    protected $fillable = [
-        'salutation',
-        'name',
-        'surname',
-        'email',
-        'start_semester_id',
-        'password',
-    ];
-
-    /** @var list<string> */
     protected $hidden = [
         'password',
         'two_factor_secret',
