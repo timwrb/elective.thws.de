@@ -1,7 +1,9 @@
 <?php
 
-test('returns a successful response', function () {
-    $response = $this->get(route('home'));
+use App\Models\User;
 
-    $response->assertOk();
+test('returns a successful response', function () {
+    $response = $this->actingAs(User::factory()->create())->get(route('home'));
+
+    $response->assertRedirect(route('dashboard'));
 });

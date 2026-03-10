@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\DayOfWeek;
 use Database\Factories\CourseScheduleFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,10 +14,10 @@ use Illuminate\Support\Carbon;
 /**
  * @property int $id
  * @property string $schedulable_type
- * @property int $schedulable_id
- * @property DayOfWeek $day_of_week
- * @property Carbon $start_time
+ * @property string $schedulable_id
+ * @property Carbon $scheduled_at
  * @property int $duration_minutes
+ * @property string|null $location
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read string $formatted_schedule
@@ -31,8 +30,7 @@ class CourseSchedule extends Model
     protected function casts(): array
     {
         return [
-            'day_of_week' => DayOfWeek::class,
-            'start_time' => 'datetime:H:i',
+            'scheduled_at' => 'datetime',
             'duration_minutes' => 'integer',
         ];
     }
@@ -46,12 +44,18 @@ class CourseSchedule extends Model
     /** @return Attribute<string, never> */
     protected function formattedSchedule(): Attribute
     {
-        return Attribute::make(get: fn () => sprintf(
-            'Termin: %s %s (%d min.)',
-            $this->day_of_week->getAbbreviation(),
-            $this->start_time->format('H:i'),
-            $this->duration_minutes
-        ));
+        return Attribute::make(get: function () {
+            $base = sprintf(
+                '%s, %s (%d min.)',
+                $this->scheduled_at->format('d.m.Y'),
+                $this->scheduled_at->format('H:i'),
+                $this->duration_minutes
+            );
+
+            return filled($this->location)
+                ? $base.' — '.$this->location
+                : $base;
+        });
     }
 
     /**
@@ -59,9 +63,9 @@ class CourseSchedule extends Model
      * @return Builder<CourseSchedule>
      */
     #[Scope]
-    protected function forDay(Builder $query, DayOfWeek $day): Builder
+    protected function orderedByDate(Builder $query): Builder
     {
-        return $query->where('day_of_week', $day);
+        return $query->orderBy('scheduled_at');
     }
 
     /**
@@ -69,11 +73,8 @@ class CourseSchedule extends Model
      * @return Builder<CourseSchedule>
      */
     #[Scope]
-    protected function orderedByDay(Builder $query): Builder
+    protected function upcoming(Builder $query): Builder
     {
-        return $query->orderByRaw("
-            FIELD(day_of_week, 'monday', 'tuesday', 'wednesday',
-                  'thursday', 'friday', 'saturday', 'sunday')
-        ")->orderBy('start_time');
+        return $query->where('scheduled_at', '>=', now());
     }
 }

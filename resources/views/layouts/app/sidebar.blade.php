@@ -12,12 +12,15 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
-                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </flux:sidebar.item>
                     @php
                         $currentSemester = resolve(\App\Services\SemesterService::class)->getCurrentSemester();
                     @endphp
+                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                        {{ __('Dashboard') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="academic-cap" :href="route('awpf.index')" :current="request()->routeIs('awpf.*')" wire:navigate>
+                        {{ __('AWPF') }}
+                    </flux:sidebar.item>
                     @if ($currentSemester)
                         <flux:sidebar.item icon="academic-cap" :href="route('fwpm.index', $currentSemester)" :current="request()->routeIs('fwpm.*')" wire:navigate>
                             {{ __('FWPM Selection') }}
