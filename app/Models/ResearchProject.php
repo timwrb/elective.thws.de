@@ -30,6 +30,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property Carbon|null $end_date
  * @property int $max_students
  * @property ElectiveStatus $status
+ * @property string|null $invite_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -145,6 +146,41 @@ class ResearchProject extends Model implements HasMedia
     public function isCreatedBy(User $user): bool
     {
         return $this->creator_id === $user->id;
+    }
+
+    public function generateInviteToken(): void
+    {
+        $this->invite_token = \Illuminate\Support\Str::random(32);
+        $this->save();
+    }
+
+    public function isUserMember(User $user, Semester $semester): bool
+    {
+        return $this->enrollments()
+            ->forUser($user)
+            ->forSemester($semester)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->exists();
+    }
+
+    public function isConfirmedMember(User $user, Semester $semester): bool
+    {
+        return $this->enrollments()
+            ->forUser($user)
+            ->forSemester($semester)
+            ->where('status', 'confirmed')
+            ->exists();
+    }
+
+    public static function isUserEnrolledInAny(User $user, Semester $semester): bool
+    {
+        return static::query()
+            ->whereHas('enrollments', function (Builder $q) use ($user, $semester): void {
+                $q->where('user_id', $user->id)
+                    ->where('semester_id', $semester->id)
+                    ->whereIn('status', ['pending', 'confirmed']);
+            })
+            ->exists();
     }
 
     public function registerMediaCollections(): void
