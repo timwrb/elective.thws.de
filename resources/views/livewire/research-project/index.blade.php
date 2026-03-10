@@ -2,33 +2,33 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <flux:heading size="xl">Research Projects</flux:heading>
-                <flux:subheading>Projects you are part of</flux:subheading>
+                <flux:heading size="xl">{{ __('Research Projects') }}</flux:heading>
+                <flux:subheading>{{ __('Projects you are part of') }}</flux:subheading>
             </div>
 
             @if($this->settings->applicationOpen && !$this->isEnrolledInAnyProject)
                 <flux:button href="{{ route('research-projects.create') }}" icon="plus" variant="primary">
-                    Create Project
+                    {{ __('Create Project') }}
                 </flux:button>
             @endif
         </div>
 
         @if($this->settings->applicationOpen && !$this->isEnrolledInAnyProject)
             <flux:callout icon="information-circle" variant="success" class="mb-6">
-                <flux:callout.heading>Applications are open</flux:callout.heading>
-                <flux:callout.text>You can create a new research project or join one via an invite link.</flux:callout.text>
+                <flux:callout.heading>{{ __('Applications are open') }}</flux:callout.heading>
+                <flux:callout.text>{{ __('You can create a new research project or join one via an invite link.') }}</flux:callout.text>
             </flux:callout>
         @endif
 
         @if($this->projects->isEmpty())
             <flux:card class="py-16 text-center">
                 <flux:icon name="beaker" class="mx-auto size-12 text-zinc-400" />
-                <flux:heading class="mt-4">No projects yet</flux:heading>
+                <flux:heading class="mt-4">{{ __('No projects yet') }}</flux:heading>
                 <flux:text>
                     @if($this->settings->applicationOpen)
-                        Create a project or ask a teammate to share their invite link.
+                        {{ __('Create a project or ask a teammate to share their invite link.') }}
                     @else
-                        You have not been enrolled in any research project.
+                        {{ __('You have not been enrolled in any research project.') }}
                     @endif
                 </flux:text>
             </flux:card>

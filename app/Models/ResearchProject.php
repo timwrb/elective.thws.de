@@ -163,6 +163,15 @@ class ResearchProject extends Model implements HasMedia
             ->exists();
     }
 
+    public function isConfirmedMember(User $user, Semester $semester): bool
+    {
+        return $this->enrollments()
+            ->forUser($user)
+            ->forSemester($semester)
+            ->where('status', 'confirmed')
+            ->exists();
+    }
+
     public static function isUserEnrolledInAny(User $user, Semester $semester): bool
     {
         return static::query()

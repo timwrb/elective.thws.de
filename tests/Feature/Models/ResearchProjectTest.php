@@ -50,3 +50,24 @@ it('returns false for non-member', function (): void {
 
     expect($project->isUserMember($user, $semester))->toBeFalse();
 });
+
+it('identifies confirmed members correctly', function (): void {
+    $semester = Semester::factory()->winter()->year(2023)->create();
+    $project = ResearchProject::factory()->withInviteToken()->create();
+    $user = User::factory()->create();
+
+    expect($project->isConfirmedMember($user, $semester))->toBeFalse();
+
+    UserSelection::factory()->create([
+        'user_id' => $user->id,
+        'semester_id' => $semester->id,
+        'elective_type' => ResearchProject::class,
+        'elective_choice_id' => $project->id,
+        'enrollment_type' => EnrollmentType::Direct,
+        'status' => EnrollmentStatus::Pending,
+    ]);
+    expect($project->isConfirmedMember($user, $semester))->toBeFalse();
+
+    UserSelection::query()->where('user_id', $user->id)->first()->update(['status' => EnrollmentStatus::Confirmed]);
+    expect($project->fresh()->isConfirmedMember($user, $semester))->toBeTrue();
+});
