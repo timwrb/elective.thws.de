@@ -18,8 +18,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 
     Route::prefix('fwpm')->name('fwpm.')->group(function () {
-        Route::livewire('/{semester}', FwpmIndex::class)->name('fwpm.index');
-        Route::livewire('{semester}/{fwpm}', FwpmShow::class)->name('fwpm.show');
+        Route::livewire('/{semester}', FwpmIndex::class)->name('index');
+        Route::livewire('{semester}/{fwpm}', FwpmShow::class)->name('show');
     });
 
     Route::prefix('awpf')->name('awpf.')->group(function () {
